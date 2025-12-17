@@ -59,21 +59,16 @@ st.write(f"Number of rows after removing duplicates: {df_cleaned.shape[0]}")
 st.subheader("3️⃣ Handling Outlier (IQR)")
 st.write("Removing outliers using the IQR (Interquartile Range) method.")
 
-# Select columns for IQR removal
 selected_cols = st.multiselect("Select columns for IQR outlier removal:", df.select_dtypes(include="number").columns.tolist(), default=df.select_dtypes(include="number").columns.tolist())
 
-# Visualize Before IQR
 st.write("Before IQR outlier removal:")
 st.pyplot(histogram(df_cleaned, selected_cols[0], f"Histogram of {selected_cols[0]} Before Outlier Removal"))
 st.pyplot(boxplot(df_cleaned, selected_cols[0], f"Boxplot of {selected_cols[0]} Before Outlier Removal"))
 
-# Apply IQR outlier removal
 df_cleaned = iqr_outlier_removal(df_cleaned, selected_cols)
 
-# Display the effect of IQR removal
 st.write(f"Number of rows after IQR removal: {df_cleaned.shape[0]}")
 
-# Visualize After IQR
 st.write("After IQR outlier removal:")
 st.pyplot(histogram(df_cleaned, selected_cols[0], f"Histogram of {selected_cols[0]} After Outlier Removal"))
 st.pyplot(boxplot(df_cleaned, selected_cols[0], f"Boxplot of {selected_cols[0]} After Outlier Removal"))
@@ -83,11 +78,9 @@ st.pyplot(boxplot(df_cleaned, selected_cols[0], f"Boxplot of {selected_cols[0]} 
 # ------------------------
 st.subheader("4️⃣ Data Transformation")
 
-# Feature Engineering: Log transformation
 st.write("Creating a log-transformed feature for 'Production' to reduce skewness.")
-df_cleaned['Log_Production'] = np.log(df_cleaned['Production'] + 1)  # Adding a log-transformed feature
+df_cleaned['Log_Production'] = np.log(df_cleaned['Production'] + 1)  
 
-# Show the log-transformed feature
 st.write(f"Here's a preview of the data with the log-transformed 'Production' column:")
 st.dataframe(df_cleaned[['Production', 'Log_Production']].head())
 
@@ -96,7 +89,6 @@ st.dataframe(df_cleaned[['Production', 'Log_Production']].head())
 # ------------------------
 st.subheader("5️⃣ Feature Scaling")
 
-# Choose scaling method (Standardization or Min-Max)
 scaling_choice = st.selectbox("Select Scaling Method", ['None', 'Standardization', 'Min-Max'])
 if scaling_choice == 'Standardization':
     from sklearn.preprocessing import StandardScaler
@@ -126,13 +118,10 @@ st.pyplot(histogram(df_cleaned, column_to_plot, f"Histogram of {column_to_plot} 
 # ------------------------
 st.subheader("📥 Download / Export")
 
-# Allow users to download the cleaned data
 download_csv(df_cleaned)
 
-# Export PDF of cleaned data and statistics
 stats_clean = summary_statistics(df_cleaned)
 export_data_pdf(df_cleaned, stats_clean, filename="report_agriculture.pdf")
 
-# Export figures to PDF
 fig_example = histogram(df_cleaned, column_to_plot, f"Histogram of {column_to_plot}")
 export_fig_to_pdf(fig_example, filename=f"{column_to_plot}_histogram.pdf")
